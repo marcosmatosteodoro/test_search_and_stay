@@ -14,6 +14,14 @@ class UserController extends Controller
     }
 
     public function store(Request $request, User $user){
+        $rules = [
+            'name' => 'required|min:3',
+            'email' => 'required|email',
+            'password' => 'required|min:8',
+        ];
+
+        $request->validate($rules);
+        
         $userData = $request->only('name', 'email', 'password');
         $userData['password'] = bcrypt($userData['password']);
         
