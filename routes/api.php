@@ -2,6 +2,7 @@
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
+use App\Http\Controllers\LoginController;
 
 /*
 |--------------------------------------------------------------------------
@@ -14,9 +15,15 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:api')->get('/user', function (Request $request) {
-    return $request->user();
-});
+// Route::middleware('auth:api')->get('/user', function (Request $request) {
+//     return $request->user();
+// });
 
-Route::apiResource('user', 'UserController');
+Route::apiResource('user', 'UserController')->middleware('auth:sanctum');
 Route::apiResource('bookstore', 'BookStoreController');
+
+Route::prefix('auth')->group(function(){
+    Route::post('login', 'LoginController@login');
+    Route::post('logout', 'LoginController@logout')->middleware('auth:sanctum');
+    Route::post('register', 'RegisterController@register');
+});
